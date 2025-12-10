@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import UsersDashboard from "./UsersDashboard";
+import UsersDashboard from "../../pages/Users";
 
 export default function DashboardSideBar() {
   const location = useLocation();

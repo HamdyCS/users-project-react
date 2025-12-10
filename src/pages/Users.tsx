@@ -1,20 +1,28 @@
 // UsersDashboard.tsx
-import React, { use, useEffect, useState } from "react";
-import UserDto from "../../dtos/UserDto";
+import React, { use, useEffect, useRef, useState } from "react";
+import UserDto from "../dtos/UserDto";
 import axios from "axios";
-import { API_URL } from "../../config";
+import { API_URL } from "../config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function UsersDashboard() {
   const [users, setUsers] = useState<UserDto[]>([]);
+  const [runGetUsersUseEffect, setRunGetUsersUseEffect] = useState<number>(0);
 
   //get users from api
   useEffect(() => {
     async function fetchUsersAsync() {
       try {
+        console.log("Fetching users...");
+
         const response = await axios.get<UserDto[]>(`${API_URL}user/show`);
 
         //usersDto[]
         const data = response.data;
+
+        if (!data) return;
 
         setUsers(response.data);
       } catch (err) {
@@ -23,7 +31,19 @@ export default function UsersDashboard() {
     }
 
     fetchUsersAsync();
-  }, []);
+  }, [runGetUsersUseEffect]);
+
+  //delete user
+  async function deleteUserAsync(id: number): Promise<void> {
+    try {
+      const response = await axios.delete(`${API_URL}user/delete/${id}`);
+
+      //update run get users use effect
+      setRunGetUsersUseEffect((prev) => prev + 1);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const usersElements = users.map((user) => (
     <tr
@@ -33,20 +53,29 @@ export default function UsersDashboard() {
       <td className="p-2">{user.id}</td>
       <td className="p-2">{user.name}</td>
       <td className="p-2">{user.email}</td>
-      <td className="p-2">{user.email_verified_at || "empty"}</td>
-      <td className="p-2">{user.created_at}</td>
-      <td className="p-2">{user.updated_at}</td>
+      <td className="p-2">{user.email_verified_at?.slice(0, 10) || "empty"}</td>
+      <td className="p-2">{user.created_at?.slice(0, 10)}</td>
+      <td className="p-2">{user.updated_at?.slice(0, 10)}</td>
 
       <td className="p-2 flex gap-5 justify-center ">
-        <button className="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        <Link
+          className="bg-green-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"
+          to={`/dashboard/users/${user.id}`}
+        >
+          <FontAwesomeIcon icon={faPenToSquare} />
           Edit
-        </button>
-        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        </Link>
+        <button
+          className="bg-red-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"
+          onClick={(e) => deleteUserAsync(user.id || 0)}
+        >
+          <FontAwesomeIcon icon={faTrash} />
           Delete
         </button>
       </td>
     </tr>
   ));
+
   return (
     <div>
       <div className="users-table-container overflow-x-auto">
