@@ -1,11 +1,11 @@
-import React, { Activity, FormEvent, useState } from "react";
+import React, { Activity, FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import LoginDto from "../dtos/LoginDto";
 import axios from "axios";
-import { API_URL } from "../config";
-import { saveToLocalStorage } from "../services/localStorageService";
 import { useAtom } from "jotai";
-import { tokenAtom } from "../atoms/atom";
+import { tokenAtom } from "../../../atoms/atom";
+import LoginDto from "../../../dtos/LoginDto";
+import { saveToLocalStorage } from "../../../services/localStorageService";
+import { API_URL } from "../../../config";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +13,40 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const [token, setToken] = useAtom(tokenAtom);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data1 = await axios.post(
+          "https://localhost:7263/api/auth/login",
+          {
+            email: "hamdy@gamil.com",
+            password: "1",
+          },
+          {
+            withCredentials: true,
+          }
+        );
+
+        console.log("login");
+        console.log(data1);
+
+        const data2 = await axios.get(
+          "https://localhost:7263/api/test/get-name",
+          {
+            withCredentials: true,
+          }
+        );
+        console.log("name");
+
+        console.log(data2);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   async function handleLogin(e: FormEvent<HTMLButtonElement>): Promise<void> {
     e.preventDefault();

@@ -1,6 +1,11 @@
 import React, { useRef } from "react";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
-import UsersDashboard from "../../pages/Users";
+import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChartLine,
+  faUserPlus,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function DashboardSideBar() {
   const location = useLocation();
@@ -8,7 +13,7 @@ export default function DashboardSideBar() {
 
   return (
     <div
-      className="relative flex w-full max-w-[20rem] flex-col rounded-xl bg-white bg-clip-border p-2 text-gray-700 shadow-lg shadow-gray-300"
+      className="relative flex w-full max-w-[20rem] flex-col rounded-xl bg-white bg-clip-border p-2 text-gray-700 shadow-lg shadow-gray-300 "
       style={{
         height: `calc(100vh - ${sidebarHeight.current})`,
       }}
@@ -19,36 +24,42 @@ export default function DashboardSideBar() {
         </h5>
       </div>
       <nav className="flex  flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">
-        <Link
-          role="button"
-          className="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900 hover:!bg-blue-400"
-          style={{
-            backgroundColor: location.pathname.endsWith("dashboard")
-              ? "#60a5fa "
-              : "transparent",
-          }}
+        <NavLink
+          end
+          className={(obj) =>
+            `flex items-center justify-center md:justify-start md:gap-6 w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900 bg-transparent hover:!bg-blue-400
+          ${obj.isActive ? "!bg-blue-400" : ""}
+          `
+          }
           to={"/dashboard"}
         >
-          <div className="grid mr-4 place-items-center">
-            <p>🖋️</p>
-          </div>
-          <p className="hidden md:block">Dashboard</p>
-        </Link>
-        <Link
-          role="button"
-          className="flex items-center p-3 px-5 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900  hover:!bg-blue-400"
-          style={{
-            backgroundColor: location.pathname.includes("users")
-              ? "#60a5fa "
-              : "transparent",
-          }}
+          <FontAwesomeIcon icon={faChartLine} />
+          <p className="hidden  md:block">Dashboard</p>
+        </NavLink>
+        <NavLink
+          end
+          className={({ isActive }) =>
+            `flex items-center justify-center md:justify-start md:gap-6 w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900 bg-transparent  hover:!bg-blue-400
+          ${isActive ? "!bg-blue-400" : ""}
+          `
+          }
           to={"/dashboard/users"}
         >
-          <div className="grid mr-4 place-items-center">
-            <p>👤</p>
-          </div>
-          <p className="hidden md:block">Users</p>
-        </Link>
+          <FontAwesomeIcon icon={faUsers} />
+          <p className="hidden  md:block">Users</p>
+        </NavLink>
+        <NavLink
+          end
+          className={({ isActive }) =>
+            `flex items-center justify-center md:justify-start md:gap-6 w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900 bg-transparent  hover:!bg-blue-400
+          ${isActive ? "!bg-blue-400" : ""}
+          `
+          }
+          to={"/dashboard/users/create"}
+        >
+          <FontAwesomeIcon icon={faUserPlus} />{" "}
+          <p className="hidden  md:block">Create User</p>
+        </NavLink>
       </nav>
     </div>
   );

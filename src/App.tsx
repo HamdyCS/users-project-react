@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Dashboard from "./pages/Dashboard";
+import Login from "./pages/website/authentication/Login";
+import SignUp from "./pages/website/authentication/SignUp";
+import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./components/NotFound";
 import "./App.css";
 

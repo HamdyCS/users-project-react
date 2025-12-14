@@ -1,8 +1,8 @@
 // UsersDashboard.tsx
 import React, { use, useEffect, useRef, useState } from "react";
-import UserDto from "../dtos/UserDto";
+import UserDto from "../../../dtos/UserDto";
 import axios from "axios";
-import { API_URL } from "../config";
+import { API_URL } from "../../../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
