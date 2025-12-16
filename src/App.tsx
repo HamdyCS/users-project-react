@@ -5,6 +5,7 @@ import SignUp from "./pages/website/authentication/SignUp";
 import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./components/NotFound";
 import "./App.css";
+import RequireAuth from "./pages/website/authentication/RequireAuth";
 
 export default function App() {
   return (
@@ -14,8 +15,12 @@ export default function App() {
           <Route index element={<div>Home Page</div>} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
-          <Route path="dashboard/*" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
+          {/* protected routes */}
+          <Route element={<RequireAuth />}>
+            <Route path="dashboard/*" element={<Dashboard />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
       </Routes>
     </div>

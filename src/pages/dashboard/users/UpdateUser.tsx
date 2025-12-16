@@ -4,10 +4,13 @@ import { useParams } from "react-router-dom";
 import UserForm from "../../../components/Froms/UserForm";
 import UserDto from "../../../dtos/UserDto";
 import { API_URL } from "../../../config";
+import { authAtom } from "../../../atoms/authAtom";
+import { useAtom } from "jotai";
 
 export default function UpdateUser() {
   const { userId } = useParams();
 
+  const [auth, setAuth] = useAtom(authAtom);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
@@ -16,7 +19,12 @@ export default function UpdateUser() {
     async function fetchUserAsync() {
       try {
         const response = await axios.get<UserDto[]>(
-          `${API_URL}user/showbyid/${userId}`
+          `${API_URL}user/showbyid/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth?.token}`,
+            },
+          }
         );
 
         console.log(response);

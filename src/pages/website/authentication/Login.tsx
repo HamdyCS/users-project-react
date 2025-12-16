@@ -1,55 +1,25 @@
-import React, { Activity, FormEvent, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAtom } from "jotai";
-import { tokenAtom } from "../../../atoms/atom";
-import LoginDto from "../../../dtos/LoginDto";
-import { saveToLocalStorage } from "../../../services/localStorageService";
+import { Activity, FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { authAtom } from "../../../atoms/authAtom";
 import { API_URL } from "../../../config";
+import LoginDto from "../../../dtos/LoginDto";
+import LoginResponseDto from "../../../dtos/LoginResponseDto";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const navigate = useNavigate();
-  const [token, setToken] = useAtom(tokenAtom);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data1 = await axios.post(
-          "https://localhost:7263/api/auth/login",
-          {
-            email: "hamdy@gamil.com",
-            password: "1",
-          },
-          {
-            withCredentials: true,
-          }
-        );
-
-        console.log("login");
-        console.log(data1);
-
-        const data2 = await axios.get(
-          "https://localhost:7263/api/test/get-name",
-          {
-            withCredentials: true,
-          }
-        );
-        console.log("name");
-
-        console.log(data2);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    fetchData();
-  }, []);
+  
+  const [auth, setAuth] = useAtom(authAtom);
 
   async function handleLogin(e: FormEvent<HTMLButtonElement>): Promise<void> {
     e.preventDefault();
+
+    //validation
     if (email === "") {
       setErrorMessage("Please set email");
       return;
@@ -63,11 +33,17 @@ export default function Login() {
     //no errors found
     setErrorMessage(null);
 
-    //login dto
-    const loginDto = new LoginDto(email, password);
+    //create login dto
+    const loginDto: LoginDto = {
+      email,
+      password,
+    };
     //login
     try {
-      const response = await axios.post(`${API_URL}login`, loginDto);
+      const response = await axios.post<LoginResponseDto>(
+        `${API_URL}login`,
+        loginDto
+      );
 
       if (!(response.status === 200) && !(response.status === 201)) {
         console.log("Login failed");
@@ -75,18 +51,25 @@ export default function Login() {
         return;
       }
 
+      const loginResponseDto: LoginResponseDto = response.data;
+
       console.log("Login successful");
-      console.log(response.data);
 
-      //save token
-      saveToLocalStorage("token", response.data.data.token);
+      //save auth info to context
+      setAuth({
+        email: loginResponseDto.data.user.email || "",
+        id: loginResponseDto.data.user.id || -1,
+        token: loginResponseDto.data.token || "",
+      });
 
-      //update token atom
-      setToken(response.data.data.token);
-
+      //redirect
       navigate("/");
     } catch (error: any) {
-      console.log(error);
+      if (error.response.status === 401) {
+        setErrorMessage("Wrong email or password");
+        console.log(error.response.data);
+        return;
+      }
     }
   }
 

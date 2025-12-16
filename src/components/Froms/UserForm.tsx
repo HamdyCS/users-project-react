@@ -1,12 +1,12 @@
-import React, { Activity, FormEvent, useEffect, useState } from "react";
-import UserDto from "../../dtos/UserDto";
 import axios from "axios";
-import { API_URL } from "../../config";
-import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
 import { useAtom } from "jotai";
-import { tokenAtom } from "../../atoms/atom";
-import { saveToLocalStorage } from "../../services/localStorageService";
+import { Activity, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { authAtom } from "../../atoms/authAtom";
+import { API_URL } from "../../config";
+import LoginResponseDto from "../../dtos/LoginResponseDto";
+import UserDto from "../../dtos/UserDto";
 
 interface UserFormProps {
   name?: string;
@@ -25,7 +25,7 @@ export default function UserForm(userFormProps: UserFormProps) {
   const navigate = useNavigate();
 
   //use it if form used type is register
-  const [token, setToken] = useAtom(tokenAtom);
+  const [auth, setAuth] = useAtom(authAtom);
 
   //use it if form used type is create or register
   const [isActionDone, setIsActionDone] = useState(false);
@@ -91,19 +91,22 @@ export default function UserForm(userFormProps: UserFormProps) {
     e: FormEvent<HTMLFormElement>,
     userDto: UserDto
   ) {
-    const response = await axios.post(`${API_URL}register`, userDto);
+    const response = await axios.post<LoginResponseDto>(
+      `${API_URL}register`,
+      userDto
+    );
 
-    //save token
-    saveToLocalStorage("token", response.data.data.token);
+    console.log("login successfully");
 
-    //update token atom
-    setToken(response.data.data.token);
+    //update authAtom
+    setAuth({
+      token: response.data.data.token || "",
+      email: response.data.data.user.email || "",
+      id: response.data.data.user.id || -1,
+    });
 
     //redirect
     navigate(userFormProps.navigateTo);
-
-    console.log("successfully");
-    console.log(response.data);
   }
 
   //handel create
@@ -111,7 +114,11 @@ export default function UserForm(userFormProps: UserFormProps) {
     e: FormEvent<HTMLFormElement>,
     userDto: UserDto
   ) {
-    const response = await axios.post(`${API_URL}user/create`, userDto);
+    const response = await axios.post(`${API_URL}user/create`, userDto, {
+      headers: {
+        Authorization: `Bearer ${auth?.token}`,
+      },
+    });
 
     //redirect
     setIsActionDone(true);
@@ -127,7 +134,12 @@ export default function UserForm(userFormProps: UserFormProps) {
   ) {
     const response = await axios.post(
       `${API_URL}user/update/${userFormProps.userId}`,
-      userDto
+      userDto,
+      {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      }
     );
 
     //to show update successfully

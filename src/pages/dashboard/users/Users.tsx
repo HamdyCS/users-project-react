@@ -6,10 +6,13 @@ import { API_URL } from "../../../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useAtom } from "jotai";
+import { authAtom } from "../../../atoms/authAtom";
 
 export default function UsersDashboard() {
   const [users, setUsers] = useState<UserDto[]>([]);
   const [runGetUsersUseEffect, setRunGetUsersUseEffect] = useState<number>(0);
+  const [auth, SetAuth] = useAtom(authAtom);
 
   //get users from api
   useEffect(() => {
@@ -17,12 +20,16 @@ export default function UsersDashboard() {
       try {
         console.log("Fetching users...");
 
-        const response = await axios.get<UserDto[]>(`${API_URL}user/show`);
+        const response = await axios.get<UserDto[]>(`${API_URL}user/show`, {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        });
 
         //usersDto[]
-        const data = response.data;
+        const userDtos = response.data;
 
-        if (!data) return;
+        if (!userDtos) return;
 
         setUsers(response.data);
       } catch (err) {
@@ -36,7 +43,11 @@ export default function UsersDashboard() {
   //delete user
   async function deleteUserAsync(id: number): Promise<void> {
     try {
-      const response = await axios.delete(`${API_URL}user/delete/${id}`);
+      const response = await axios.delete(`${API_URL}user/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
 
       //update run get users use effect
       setRunGetUsersUseEffect((prev) => prev + 1);
