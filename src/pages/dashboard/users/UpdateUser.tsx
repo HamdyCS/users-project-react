@@ -27,15 +27,12 @@ export default function UpdateUser() {
           }
         );
 
-        console.log(response);
         const user = response.data[0];
 
         //set values
         setName(user.name);
         setEmail(user.email);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
 
     fetchUserAsync();

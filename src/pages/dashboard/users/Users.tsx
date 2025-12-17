@@ -18,7 +18,6 @@ export default function UsersDashboard() {
   useEffect(() => {
     async function fetchUsersAsync() {
       try {
-        console.log("Fetching users...");
 
         const response = await axios.get<UserDto[]>(`${API_URL}user/show`, {
           headers: {
@@ -33,7 +32,6 @@ export default function UsersDashboard() {
 
         setUsers(response.data);
       } catch (err) {
-        console.log(err);
       }
     }
 
@@ -52,7 +50,6 @@ export default function UsersDashboard() {
       //update run get users use effect
       setRunGetUsersUseEffect((prev) => prev + 1);
     } catch (err) {
-      console.log(err);
     }
   }
 

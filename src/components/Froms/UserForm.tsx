@@ -96,12 +96,10 @@ export default function UserForm(userFormProps: UserFormProps) {
       userDto
     );
 
-    console.log("login successfully");
-
-    //update authAtom
+    //update auth info
     setAuth({
-      token: response.data.data.token || "",
-      email: response.data.data.user.email || "",
+      token: response.data.data.token,
+      email: response.data.data.user.email,
       id: response.data.data.user.id || -1,
     });
 
@@ -122,9 +120,6 @@ export default function UserForm(userFormProps: UserFormProps) {
 
     //redirect
     setIsActionDone(true);
-
-    console.log("successfully");
-    console.log(response.data);
   }
 
   //handel update
@@ -144,9 +139,6 @@ export default function UserForm(userFormProps: UserFormProps) {
 
     //to show update successfully
     setIsActionDone(true);
-
-    console.log("successfully");
-    console.log(response.data);
   }
 
   //handel submit
@@ -189,8 +181,6 @@ export default function UserForm(userFormProps: UserFormProps) {
       ) {
         setErrorMessage("Email already exists");
       }
-
-      console.log(error);
     }
   }
 

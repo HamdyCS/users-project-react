@@ -6,6 +6,7 @@ import { authAtom } from "../../../atoms/authAtom";
 import { API_URL } from "../../../config";
 import LoginDto from "../../../dtos/LoginDto";
 import LoginResponseDto from "../../../dtos/LoginResponseDto";
+import Cookies from "universal-cookie";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -13,7 +14,7 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  
+
   const [auth, setAuth] = useAtom(authAtom);
 
   async function handleLogin(e: FormEvent<HTMLButtonElement>): Promise<void> {
@@ -46,20 +47,20 @@ export default function Login() {
       );
 
       if (!(response.status === 200) && !(response.status === 201)) {
-        console.log("Login failed");
-        console.log(response.data);
         return;
       }
 
       const loginResponseDto: LoginResponseDto = response.data;
 
-      console.log("Login successful");
+      //save token to cookie
+      const cookie = new Cookies();
+      cookie.set("BearerToken", loginResponseDto.data.token);
 
       //save auth info to context
       setAuth({
-        email: loginResponseDto.data.user.email || "",
+        email: loginResponseDto.data.user.email,
         id: loginResponseDto.data.user.id || -1,
-        token: loginResponseDto.data.token || "",
+        token: loginResponseDto.data.token,
       });
 
       //redirect
@@ -67,7 +68,6 @@ export default function Login() {
     } catch (error: any) {
       if (error.response.status === 401) {
         setErrorMessage("Wrong email or password");
-        console.log(error.response.data);
         return;
       }
     }
