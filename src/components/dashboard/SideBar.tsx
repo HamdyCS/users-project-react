@@ -3,9 +3,11 @@ import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
+  faPlus,
   faUserPlus,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import { faProductHunt } from "@fortawesome/free-brands-svg-icons";
 
 export default function DashboardSideBar() {
   const location = useLocation();
@@ -59,6 +61,28 @@ export default function DashboardSideBar() {
         >
           <FontAwesomeIcon icon={faUserPlus} />{" "}
           <p className="hidden  md:block">Create User</p>
+        </NavLink>
+        <NavLink
+          to={"/dashboard/products"}
+          end
+          className={({
+            isActive,
+          }) => `flex items-center justify-center md:justify-start md:gap-6 w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900 bg-transparent  hover:!bg-blue-400
+          ${isActive ? "!bg-blue-400" : ""}`}
+        >
+          <FontAwesomeIcon icon={faProductHunt} />{" "}
+          <p className="hidden  md:block">Products</p>
+        </NavLink>
+        <NavLink
+          to={"/dashboard/products/create"}
+          end
+          className={({
+            isActive,
+          }) => `flex items-center justify-center md:justify-start md:gap-6 w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900 bg-transparent  hover:!bg-blue-400
+          ${isActive ? "!bg-blue-400" : ""}`}
+        >
+          <FontAwesomeIcon icon={faPlus} />{" "}
+          <p className="hidden  md:block">Create Product</p>
         </NavLink>
       </nav>
     </div>

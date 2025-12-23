@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import UserForm from "../../../components/Froms/UserForm";
-import UserDto from "../../../dtos/UserDto";
+import UserDto from "../../../dtos/Auth/UserDto";
 import { API_URL } from "../../../config";
 import { authAtom } from "../../../atoms/authAtom";
 import { useAtom } from "jotai";

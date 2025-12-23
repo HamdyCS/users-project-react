@@ -7,6 +7,7 @@ export default function RequireAuth() {
   const [auth, setAuth] = useAtom(authAtom);
   const location = useLocation();
 
+
   return auth?.token ? (
     <Outlet />
   ) : (

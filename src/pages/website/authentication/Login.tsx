@@ -4,8 +4,8 @@ import { Activity, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authAtom } from "../../../atoms/authAtom";
 import { API_URL } from "../../../config";
-import LoginDto from "../../../dtos/LoginDto";
-import LoginResponseDto from "../../../dtos/LoginResponseDto";
+import LoginDto from "../../../dtos/Auth/LoginDto";
+import LoginResponseDto from "../../../dtos/Auth/LoginResponseDto";
 import Cookies from "universal-cookie";
 
 export default function Login() {
@@ -54,7 +54,10 @@ export default function Login() {
 
       //save token to cookie
       const cookie = new Cookies();
-      cookie.set("BearerToken", loginResponseDto.data.token);
+      cookie.set("BearerToken", loginResponseDto.data.token, {
+        path: "/",
+        sameSite: "lax",
+      });
 
       //save auth info to context
       setAuth({

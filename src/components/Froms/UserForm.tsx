@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { authAtom } from "../../atoms/authAtom";
 import { API_URL } from "../../config";
-import LoginResponseDto from "../../dtos/LoginResponseDto";
-import UserDto from "../../dtos/UserDto";
-
+import LoginResponseDto from "../../dtos/Auth/LoginResponseDto";
+import Cookies from "universal-cookie";
+import UserDto from "../../dtos/Auth/UserDto";
 interface UserFormProps {
   name?: string;
   email?: string;
@@ -95,6 +95,10 @@ export default function UserForm(userFormProps: UserFormProps) {
       `${API_URL}register`,
       userDto
     );
+
+    //save token to cookie
+    const cookie = new Cookies();
+    cookie.set("BearerToken", response.data.data.token);
 
     //update auth info
     setAuth({

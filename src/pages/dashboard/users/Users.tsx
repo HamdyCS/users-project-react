@@ -1,6 +1,6 @@
 // UsersDashboard.tsx
 import React, { use, useEffect, useRef, useState } from "react";
-import UserDto from "../../../dtos/UserDto";
+import UserDto from "../../../dtos/Auth/UserDto";
 import axios from "axios";
 import { API_URL } from "../../../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +18,6 @@ export default function UsersDashboard() {
   useEffect(() => {
     async function fetchUsersAsync() {
       try {
-
         const response = await axios.get<UserDto[]>(`${API_URL}user/show`, {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
@@ -31,8 +30,7 @@ export default function UsersDashboard() {
         if (!userDtos) return;
 
         setUsers(response.data);
-      } catch (err) {
-      }
+      } catch (err) {}
     }
 
     fetchUsersAsync();
@@ -49,8 +47,7 @@ export default function UsersDashboard() {
 
       //update run get users use effect
       setRunGetUsersUseEffect((prev) => prev + 1);
-    } catch (err) {
-    }
+    } catch (err) {}
   }
 
   const usersElements = users.map((user) => (

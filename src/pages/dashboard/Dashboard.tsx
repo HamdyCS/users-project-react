@@ -5,6 +5,9 @@ import NotFound from "../../components/NotFound";
 import Users from "./users/Users";
 import UpdateUser from "./users/UpdateUser";
 import CreateUser from "./users/CreateUser";
+import Products from "./products/Products";
+import CreateProduct from "./products/CreateProduct";
+import UpdateProduct from "./products/UpdateProduct";
 
 export default function dashboard() {
   return (
@@ -14,11 +17,17 @@ export default function dashboard() {
         <DashboardSideBar />
         <div className="bg-blue-300 flex-grow p-5 min-w-0">
           <Routes>
+            {/* users */}
             <Route index element={<Users />} />
             <Route path="users" element={<Users />} />
             <Route path="users/:userId" element={<UpdateUser />} />
             <Route path="users/create" element={<CreateUser />} />
             <Route path="*" element={<NotFound />} />
+
+            {/* Products */}
+            <Route path="products" element={<Products />} />
+            <Route path="products/create" element={<CreateProduct />} />
+            <Route path="products/:productId" element={<UpdateProduct />} />
           </Routes>
         </div>
       </div>

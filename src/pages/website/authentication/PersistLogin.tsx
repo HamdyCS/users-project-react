@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { authAtom } from "../../../atoms/authAtom";
-import RefreshTokenResponseDto from "../../../dtos/RefreshTokenResponseDto";
+import RefreshTokenResponseDto from "../../../dtos/Auth/RefreshTokenResponseDto";
 import { API_URL } from "../../../config";
 
 export default function PersistLogin() {
@@ -34,7 +34,10 @@ export default function PersistLogin() {
         );
 
         //set new token to token cookie
-        cookie.set("BearerToken", response.data.token);
+        cookie.set("BearerToken", response.data.token, {
+          path: "/",
+          sameSite: "lax",
+        });
 
         //update auth info
         setAuth({
@@ -43,6 +46,7 @@ export default function PersistLogin() {
           token: response.data.token,
         });
       } catch (err) {
+        console.log(err);
       } finally {
         //set loading false
         setIsLoading(false);
