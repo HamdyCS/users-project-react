@@ -26,15 +26,19 @@ export default function Products({ type }: ProductsProps) {
   //fetch products
   useEffect(() => {
     async function fetchProducts() {
-      //fetch products from api
-      const products = await getWithTokenAsync<ProductDto[]>(
-        "product/show",
-        auth?.token || ""
-      );
+      try {
+        //fetch products from api
+        const products = await getWithTokenAsync<ProductDto[]>(
+          "product/show",
+          auth?.token || ""
+        );
 
-      setProducts(products);
-
-      setIsLoading(false);
+        setProducts(products);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     fetchProducts();
@@ -88,7 +92,7 @@ export default function Products({ type }: ProductsProps) {
       <h3 className="font-bold text-lg">{product.title}</h3>
       <p className="">{product.description}</p>
 
-      {(type === "dashboard") && (
+      {type === "dashboard" && (
         <div className="p-2 flex gap-5 justify-center ">
           <Link
             className="bg-green-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"

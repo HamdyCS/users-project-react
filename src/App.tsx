@@ -18,7 +18,7 @@ export default function App() {
             <Route
               index
               element={
-                <div className="container mx-auto p-5">
+                <div className="container mx-auto mt-5">
                   <Products type="website" />
                 </div>
               }
