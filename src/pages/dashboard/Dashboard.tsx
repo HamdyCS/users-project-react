@@ -5,9 +5,9 @@ import NotFound from "../../components/NotFound";
 import Users from "./users/Users";
 import UpdateUser from "./users/UpdateUser";
 import CreateUser from "./users/CreateUser";
-import Products from "./products/Products";
 import CreateProduct from "./products/CreateProduct";
 import UpdateProduct from "./products/UpdateProduct";
+import ProductsDashboard from "./products/ProductsDashboard";
 
 export default function dashboard() {
   return (
@@ -25,7 +25,7 @@ export default function dashboard() {
             <Route path="*" element={<NotFound />} />
 
             {/* Products */}
-            <Route path="products" element={<Products />} />
+            <Route path="products" element={<ProductsDashboard />} />
             <Route path="products/create" element={<CreateProduct />} />
             <Route path="products/:productId" element={<UpdateProduct />} />
           </Routes>

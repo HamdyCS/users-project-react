@@ -12,7 +12,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-export default function Products() {
+interface ProductsProps {
+  type: "website" | "dashboard";
+}
+export default function Products({ type }: ProductsProps) {
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [auth, setAuth] = useAtom(authAtom);
   const [isLoading, setIsLoading] = useState(true);
@@ -85,22 +88,24 @@ export default function Products() {
       <h3 className="font-bold text-lg">{product.title}</h3>
       <p className="">{product.description}</p>
 
-      <div className="p-2 flex gap-5 justify-center ">
-        <Link
-          className="bg-green-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"
-          to={`/dashboard/products/${product.id}`}
-        >
-          <FontAwesomeIcon icon={faPenToSquare} />
-          Edit
-        </Link>
-        <button
-          className="bg-red-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"
-          onClick={() => deleteProduct(product.id)}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-          Delete
-        </button>
-      </div>
+      {(type === "dashboard") && (
+        <div className="p-2 flex gap-5 justify-center ">
+          <Link
+            className="bg-green-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"
+            to={`/dashboard/products/${product.id}`}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+            Edit
+          </Link>
+          <button
+            className="bg-red-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center gap-2 hover:scale-110 transition"
+            onClick={() => deleteProduct(product.id)}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+            Delete
+          </button>
+        </div>
+      )}
     </div>
   ));
 

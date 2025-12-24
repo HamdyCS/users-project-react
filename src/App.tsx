@@ -7,6 +7,7 @@ import NotFound from "./components/NotFound";
 import "./App.css";
 import RequireAuth from "./pages/website/authentication/RequireAuth";
 import PersistLogin from "./pages/website/authentication/PersistLogin";
+import Products from "./pages/website/products/Products";
 
 export default function App() {
   return (
@@ -14,7 +15,14 @@ export default function App() {
       <Routes>
         <Route element={<PersistLogin />}>
           <Route path="/" element={<Layout />}>
-            <Route index element={<div>Home Page</div>} />
+            <Route
+              index
+              element={
+                <div className="container mx-auto p-5">
+                  <Products type="website" />
+                </div>
+              }
+            />
             <Route path="signup" element={<SignUp />} />
             <Route path="login" element={<Login />} />
             <Route path="*" element={<NotFound />} />
